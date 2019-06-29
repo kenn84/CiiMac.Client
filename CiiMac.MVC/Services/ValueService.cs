@@ -4,20 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CiiMac.MVC.Services.Base;
 
 namespace CiiMac.MVC.Services
 {
     public class ValueService
     {
-        public static async Task<Values> GetValuesAsync(string path)
+        private HttpClient _client;
+
+        public ValueService()
         {
-            HttpClient client = new HttpClient();
-            Values value = new Values();
-            HttpResponseMessage response = await client.GetAsync(path);
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:51948")
+            };
+        }
+
+        public async Task<List<Value>> GetValuesAsync()
+        {
+            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "/api/values");
             if (response.IsSuccessStatusCode)
             {
-                value = await response.Content.ReadAsAsync<Values>();
+                var value = response.Content.ReadAsStringAsync().Result;
+
             }
+
             return value;
         }
     }

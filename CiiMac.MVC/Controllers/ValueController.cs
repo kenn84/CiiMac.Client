@@ -8,13 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CiiMac.MVC.Controllers
 {
+    [Route("api/[controller]")]
     public class ValueController : Controller
     {
         public IActionResult Index()
-        {
-            
-           Task<Values> values = ValueService.GetValuesAsync("https://localhost:44311/api/values");
+        {           
             return View();
         }
+
+        [HttpGet]
+        public List<Value> GetValues()
+        {
+            ValueService valueService = new ValueService();
+            return valueService.GetValuesAsync().Result;            
+        }
+
     }
 }
