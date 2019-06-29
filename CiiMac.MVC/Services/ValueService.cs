@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CiiMac.MVC.Services.Base;
+using Newtonsoft.Json;
 
 namespace CiiMac.MVC.Services
 {
@@ -20,16 +21,17 @@ namespace CiiMac.MVC.Services
             };
         }
 
-        public async Task<List<Value>> GetValuesAsync()
+        public List<string> GetValues()
         {
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "/api/values");
+            List<string> values = new List<string>();
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "api/values").Result;
             if (response.IsSuccessStatusCode)
             {
-                var value = response.Content.ReadAsStringAsync().Result;
-
+                var result = response.Content.ReadAsStringAsync().Result;
+                values = JsonConvert.DeserializeObject<List<string>>(result);
             }
 
-            return value;
+            return values;
         }
     }
 }

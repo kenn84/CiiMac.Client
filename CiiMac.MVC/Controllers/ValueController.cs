@@ -8,20 +8,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CiiMac.MVC.Controllers
 {
-    [Route("api/[controller]")]
     public class ValueController : Controller
     {
-        public IActionResult Index()
-        {           
-            return View();
-        }
-
         [HttpGet]
-        public List<Value> GetValues()
+        public IActionResult Index()
         {
             ValueService valueService = new ValueService();
-            return valueService.GetValuesAsync().Result;            
-        }
+            List<string> stringvalues = valueService.GetValues();
 
+            List<Value> values = new List<Value>();
+            for (int i = 0; i < stringvalues.Count; i++)
+            {
+                Value value = new Value();                
+                string variable = stringvalues.ElementAt<string>(i);
+                value.StringValue = variable;
+                values.Add(value);
+            }
+
+            return View(values);
+        }
     }
 }

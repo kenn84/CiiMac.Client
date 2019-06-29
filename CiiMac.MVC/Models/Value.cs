@@ -8,8 +8,7 @@ namespace CiiMac.MVC.Models
     public class Value
 
     {
-        public string ValueOne { get; set; }
-        public string ValueTwo { get; set; }
+        public string StringValue { get; set; }
 
         public Value()
         {
